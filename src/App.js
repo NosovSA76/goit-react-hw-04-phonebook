@@ -7,6 +7,7 @@ import { Search } from "./components/Search/search";
 import { ContactList } from "./components/Contactslist/contactList";
 import { ShowButton } from "./components/ShowButton/showButton";
 import { CountMessage } from "./components/CountMessage/CountMessage";
+import { WarningText } from "./App.styled";
 import { getCountMessage } from "./utils/getCountMessage";
 import { save, load } from "./utils/localStorageJSON";
 
@@ -21,19 +22,11 @@ export const App = () => {
   }, [contacts]);
 
   useEffect(() => {
-    if (searchText) {
-      const normalSearchText = searchText.toLowerCase();
-      if (contacts.length > 0) {
-        const filtered = contacts.filter((contact) =>
-          contact.name.toLowerCase().includes(normalSearchText)
-        );
-        setFilterContacts(filtered);
-      } else {
-        setFilterContacts(contacts);
-      }
-    } else {
-      setFilterContacts(contacts);
-    }
+    setFilterContacts(
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
   }, [searchText, contacts]);
 
   const changeFilter = (e) => {
@@ -86,7 +79,7 @@ export const App = () => {
             text={"Find contacts by name"}
           />
           {filterContacts.length === 0 ? (
-            <p>There are no contacts matching the search criteria</p>
+            <WarningText>Nothing was found for your request</WarningText>
           ) : (
             <ContactList
               contacts={filterContacts}
